@@ -15,8 +15,7 @@
 		FF977EC0245F55C100BF1614 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF977EBE245F55C100BF1614 /* Main.storyboard */; };
 		FF977EC2245F55C300BF1614 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF977EC1245F55C300BF1614 /* Assets.xcassets */; };
 		FF977EC5245F55C300BF1614 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF977EC3245F55C300BF1614 /* LaunchScreen.storyboard */; };
-		FF977ED0245F55C300BF1614 /* BallzTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF977ECF245F55C300BF1614 /* BallzTests.swift */; };
-		FF977EDB245F55C300BF1614 /* BallzUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF977EDA245F55C300BF1614 /* BallzUITests.swift */; };
+		FF977EEB245F6BC700BF1614 /* Ball.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF977EEA245F6BC700BF1614 /* Ball.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,11 +47,8 @@
 		FF977EC4245F55C300BF1614 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FF977EC6245F55C300BF1614 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FF977ECB245F55C300BF1614 /* BallzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BallzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FF977ECF245F55C300BF1614 /* BallzTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallzTests.swift; sourceTree = "<group>"; };
-		FF977ED1245F55C300BF1614 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FF977ED6245F55C300BF1614 /* BallzUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BallzUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FF977EDA245F55C300BF1614 /* BallzUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallzUITests.swift; sourceTree = "<group>"; };
-		FF977EDC245F55C300BF1614 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FF977EEA245F6BC700BF1614 /* Ball.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ball.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,8 +80,6 @@
 			isa = PBXGroup;
 			children = (
 				FF977EB3245F55C100BF1614 /* Ballz */,
-				FF977ECE245F55C300BF1614 /* BallzTests */,
-				FF977ED9245F55C300BF1614 /* BallzUITests */,
 				FF977EB2245F55C100BF1614 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -112,26 +106,9 @@
 				FF977EC1245F55C300BF1614 /* Assets.xcassets */,
 				FF977EC3245F55C300BF1614 /* LaunchScreen.storyboard */,
 				FF977EC6245F55C300BF1614 /* Info.plist */,
+				FF977EEA245F6BC700BF1614 /* Ball.swift */,
 			);
 			path = Ballz;
-			sourceTree = "<group>";
-		};
-		FF977ECE245F55C300BF1614 /* BallzTests */ = {
-			isa = PBXGroup;
-			children = (
-				FF977ECF245F55C300BF1614 /* BallzTests.swift */,
-				FF977ED1245F55C300BF1614 /* Info.plist */,
-			);
-			path = BallzTests;
-			sourceTree = "<group>";
-		};
-		FF977ED9245F55C300BF1614 /* BallzUITests */ = {
-			isa = PBXGroup;
-			children = (
-				FF977EDA245F55C300BF1614 /* BallzUITests.swift */,
-				FF977EDC245F55C300BF1614 /* Info.plist */,
-			);
-			path = BallzUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -267,6 +244,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF977EEB245F6BC700BF1614 /* Ball.swift in Sources */,
 				FF977EBB245F55C100BF1614 /* GameScene.swift in Sources */,
 				FF977EBD245F55C100BF1614 /* GameViewController.swift in Sources */,
 				FF977EB5245F55C100BF1614 /* AppDelegate.swift in Sources */,
@@ -277,7 +255,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF977ED0245F55C300BF1614 /* BallzTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,7 +262,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF977EDB245F55C300BF1614 /* BallzUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

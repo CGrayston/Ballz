@@ -9,79 +9,78 @@
 import SpriteKit
 import GameplayKit
 
+private struct BallConstants {
+    static var yPositionMultiplier: CGFloat = 0.8
+    static var sizeMultiplier: CGFloat = 0.05
+}
+
 class GameScene: SKScene {
+    // Node Declaration
+    var ball = Ball()
     
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    
+    // Variable Declaration
     
     override func didMove(to view: SKView) {
+        // Setup ball
+        setupBall()
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
-        }
+        // Create border
+        let border = SKPhysicsBody(edgeLoopFrom: self.frame)
+        border.friction = 0
+        border.restitution = 1
+        self.physicsBody = border
         
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
-        
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
-            
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
-        }
+        //ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 20))
+    }
+
+    // MARK: - Helper Methods
+    
+    func setupBall() {
+        // Create ball
+        ball.position.y = self.frame.minY * BallConstants.yPositionMultiplier
+        ball.size.width = self.frame.width * BallConstants.sizeMultiplier
+        ball.size.height = self.frame.width * BallConstants.sizeMultiplier
+        addChild(ball)
+        ball.adjustedSize = ball.size
     }
     
     
-    func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
-    }
+    // MARK: - Touches Methods
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+        // Track where the touch began so we can make the arrow from the ball
+        ball.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+        ball.position = CGPoint(x: 0, y: self.frame.minY * BallConstants.yPositionMultiplier)
+        for touch in touches {
+            // Reset ball velocity
+            
+            //print("Touch started: \(touch.location(in: self))")
+            let touchLocation = touch.location(in: self)
+            
+            // Set touches began
+            ball.touchesBegan = touchLocation
         }
-        
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        for touch in touches {
+            //print("Touch ended: \(touch.location(in: self))")
+            // Set touches ended
+            let touchLocation = touch.location(in: self)
+            ball.touchesEnded = touchLocation
+            
+            print("dx: \(ball.dx), dy: \(ball.dy)")
+            
+            ball.physicsBody?.applyImpulse(CGVector(dx: ball.dx, dy: ball.dy))
+        }
     }
     
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        for touch in touches {
+//            print("Touch moved: \(touch.location(in: self))")
+//        }
     }
-    
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
