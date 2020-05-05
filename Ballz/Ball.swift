@@ -62,7 +62,13 @@ class Ball: SKSpriteNode {
         // Set physics body properties
         physicsBody = SKPhysicsBody(circleOfRadius: max(adjustedSize.width / 2,
         adjustedSize.height / 2))
+        physicsBody?.isDynamic = true
         physicsBody?.mass = 0.2
+        physicsBody?.allowsRotation = false
         physicsBody?.affectedByGravity = false
+        physicsBody?.friction = 0
+        physicsBody?.restitution = 1
+        physicsBody?.linearDamping = 0
+        physicsBody?.angularDamping = 0
     }
 }
