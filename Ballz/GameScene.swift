@@ -14,23 +14,30 @@ private struct Constants {
         static var yPositionMultiplier: CGFloat = 0.8
         static var safeAreaMarginMultiplier = (1 - Constants.Multiplier.yPositionMultiplier) / 2
         static var ballSizeMultiplier: CGFloat = 0.045
+        static var blockSizeDivisor: CGFloat = 7.0
     }
     
     struct Colors {
         static var playArea = UIColor(white: 0.08, alpha: 1.0)
-        static var background = UIColor(white: 1.0, alpha: 1.0)
+        static var background = UIColor(white: 0.15, alpha: 1.0)
     }
 }
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     // Node Declaration
     var ball = Ball()
+    var block = Block()
     var playArea = SKSpriteNode()
+    
+    var blockLabel = SKLabelNode()
     
     // Variable Declaration
     var frameSize = CGRect.zero
     
     override func didMove(to view: SKView) {
+        // Set Delegate
+        self.physicsWorld.contactDelegate = self
+        
         // Set desired play area size
         frameSize = CGRect(x: self.frame.minX, y: self.frame.minY + (self.frame.height * Constants.Multiplier.safeAreaMarginMultiplier), width: self.frame.width, height: self.frame.height * Constants.Multiplier.yPositionMultiplier)
         
@@ -40,13 +47,20 @@ class GameScene: SKScene {
         // Setup ball
         setupBall()
         
+        // Setup block
+        setupBlock()
+        
         // Setup border
         setupBorder()
         
-        // Add to scene
-        self.addChild(ball)
+        // Add children
         self.addChild(playArea)
-        self.backgroundColor = UIColor.red
+        self.addChild(ball)
+        self.addChild(block)
+        self.addChild(blockLabel)
+        
+        // Set background color
+        self.backgroundColor = Constants.Colors.background
     }
 
     // MARK: - Helper Methods
@@ -54,7 +68,7 @@ class GameScene: SKScene {
     func setupPlayArea() {
         playArea.position = CGPoint(x: frameSize.midX, y: frameSize.midY)
         playArea.size = CGSize(width: frameSize.width, height: frameSize.height)
-        playArea.color = UIColor.blue
+        playArea.color = Constants.Colors.playArea
     }
     
     func setupBall() {
@@ -62,6 +76,23 @@ class GameScene: SKScene {
         ball.size.width = self.frame.width * Constants.Multiplier.ballSizeMultiplier
         ball.size.height = self.frame.width * Constants.Multiplier.ballSizeMultiplier
         ball.adjustedSize = ball.size
+    }
+    
+    func setupBlock() {
+        // Block position
+        block.position.y = self.playArea.frame.maxY * Constants.Multiplier.yPositionMultiplier
+        block.position.x = self.frame.midX
+        block.size.width = self.frame.width / Constants.Multiplier.blockSizeDivisor
+        block.size.height = self.frame.width / Constants.Multiplier.blockSizeDivisor
+        block.adjustedSize = block.size
+        
+        // Block label
+        blockLabel.position = CGPoint(x: block.frame.midX, y: (block.frame.midY) - (block.frame.height / 8))
+        blockLabel.fontSize = 20
+        blockLabel.fontColor = UIColor.black
+        blockLabel.fontName = "LLPIXEL3.ttf"
+        blockLabel.text = "\(block.hp)"
+        
     }
     
     func setupBorder() {
@@ -74,11 +105,12 @@ class GameScene: SKScene {
     // MARK: - Touches Methods
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // Track where the touch began so we can make the arrow from the ball
+        // TODO: Track where the touch began so we can make the arrow from the ball
+        
+        // Reset ball velocity and position
         ball.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
         ball.position = CGPoint(x: 0, y: self.frame.minY * Constants.Multiplier.yPositionMultiplier)
         for touch in touches {
-            // Reset ball velocity
             
             //print("Touch started: \(touch.location(in: self))")
             let touchLocation = touch.location(in: self)
@@ -95,8 +127,6 @@ class GameScene: SKScene {
             let touchLocation = touch.location(in: self)
             ball.touchesEnded = touchLocation
             
-            print("dx: \(ball.dx), dy: \(ball.dy)")
-            
             ball.physicsBody?.applyImpulse(CGVector(dx: ball.dx, dy: ball.dy))
         }
     }
@@ -110,4 +140,16 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
     }
+    
+    // MARK: - SKPhysicsContactDelegate Functions
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        if(block.hp < 1) {
+            block.isHidden = true
+            blockLabel.isHidden = true
+        }
+        block.hp -= 1
+        blockLabel.text = "\(block.hp)"
+    }
+    
 }

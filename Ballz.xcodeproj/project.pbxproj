@@ -16,6 +16,8 @@
 		FF977EC2245F55C300BF1614 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF977EC1245F55C300BF1614 /* Assets.xcassets */; };
 		FF977EC5245F55C300BF1614 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF977EC3245F55C300BF1614 /* LaunchScreen.storyboard */; };
 		FF977EEB245F6BC700BF1614 /* Ball.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF977EEA245F6BC700BF1614 /* Ball.swift */; };
+		FF977EED246132F400BF1614 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF977EEC246132F400BF1614 /* Block.swift */; };
+		FF977EEF2461434F00BF1614 /* LLPIXEL3.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FF977EEE2461434F00BF1614 /* LLPIXEL3.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		FF977ECB245F55C300BF1614 /* BallzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BallzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF977ED6245F55C300BF1614 /* BallzUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BallzUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF977EEA245F6BC700BF1614 /* Ball.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ball.swift; sourceTree = "<group>"; };
+		FF977EEC246132F400BF1614 /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
+		FF977EEE2461434F00BF1614 /* LLPIXEL3.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = LLPIXEL3.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +101,7 @@
 		FF977EB3245F55C100BF1614 /* Ballz */ = {
 			isa = PBXGroup;
 			children = (
+				FF977EEE2461434F00BF1614 /* LLPIXEL3.ttf */,
 				FF977EB4245F55C100BF1614 /* AppDelegate.swift */,
 				FF977EB6245F55C100BF1614 /* GameScene.sks */,
 				FF977EB8245F55C100BF1614 /* Actions.sks */,
@@ -107,6 +112,7 @@
 				FF977EC3245F55C300BF1614 /* LaunchScreen.storyboard */,
 				FF977EC6245F55C300BF1614 /* Info.plist */,
 				FF977EEA245F6BC700BF1614 /* Ball.swift */,
+				FF977EEC246132F400BF1614 /* Block.swift */,
 			);
 			path = Ballz;
 			sourceTree = "<group>";
@@ -216,6 +222,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF977EC0245F55C100BF1614 /* Main.storyboard in Resources */,
+				FF977EEF2461434F00BF1614 /* LLPIXEL3.ttf in Resources */,
 				FF977EB7245F55C100BF1614 /* GameScene.sks in Resources */,
 				FF977EC2245F55C300BF1614 /* Assets.xcassets in Resources */,
 				FF977EC5245F55C300BF1614 /* LaunchScreen.storyboard in Resources */,
@@ -246,6 +253,7 @@
 			files = (
 				FF977EEB245F6BC700BF1614 /* Ball.swift in Sources */,
 				FF977EBB245F55C100BF1614 /* GameScene.swift in Sources */,
+				FF977EED246132F400BF1614 /* Block.swift in Sources */,
 				FF977EBD245F55C100BF1614 /* GameViewController.swift in Sources */,
 				FF977EB5245F55C100BF1614 /* AppDelegate.swift in Sources */,
 			);
