@@ -13,7 +13,7 @@ class Ball: SKSpriteNode {
     // MARK: - Landing Pad
     var adjustedSize: CGSize? {
         didSet {
-            setup()
+            setupPhysicsBody()
         }
     }
     
@@ -54,7 +54,7 @@ class Ball: SKSpriteNode {
     // MARK: - Methods
     
     // MARK: - Setup
-    func setup() {
+    func setupPhysicsBody() {
         guard let adjustedSize = adjustedSize else {
             fatalError("Wasn't able to pass screen size")
         }
@@ -63,12 +63,19 @@ class Ball: SKSpriteNode {
         physicsBody = SKPhysicsBody(circleOfRadius: max(adjustedSize.width / 2,
         adjustedSize.height / 2))
         physicsBody?.isDynamic = true
-        physicsBody?.mass = 0.2
         physicsBody?.allowsRotation = false
+        physicsBody?.pinned = false
         physicsBody?.affectedByGravity = false
+        
         physicsBody?.friction = 0
         physicsBody?.restitution = 1
         physicsBody?.linearDamping = 0
         physicsBody?.angularDamping = 0
+        physicsBody?.mass = 0.2
+        
+        physicsBody?.categoryBitMask = 1
+        physicsBody?.collisionBitMask = 2
+        physicsBody?.fieldBitMask = 0
+        physicsBody?.contactTestBitMask = 0
     }
 }
