@@ -24,12 +24,15 @@ private struct Constants {
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+    // MARK: -  Properties
+    
     // Node Declaration
     var ball = Ball()
     var block = Block()
     var playArea = SKSpriteNode()
     
-    var blockLabel = SKLabelNode()
+    
     
     // Variable Declaration
     var frameSize = CGRect.zero
@@ -41,23 +44,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Set desired play area size
         frameSize = CGRect(x: self.frame.minX, y: self.frame.minY + (self.frame.height * Constants.Multiplier.safeAreaMarginMultiplier), width: self.frame.width, height: self.frame.height * Constants.Multiplier.yPositionMultiplier)
         
-        // Setup play area
+        // Setup game scene
         setupPlayArea()
-        
-        // Setup ball
         setupBall()
-        
-        // Setup block
         setupBlock()
-        
-        // Setup border
         setupBorder()
         
         // Add children
         self.addChild(playArea)
         self.addChild(ball)
         self.addChild(block)
-        self.addChild(blockLabel)
         
         // Set background color
         self.backgroundColor = Constants.Colors.background
@@ -79,20 +75,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupBlock() {
-        // Block position
         block.position.y = self.playArea.frame.maxY * Constants.Multiplier.yPositionMultiplier
         block.position.x = self.frame.midX
         block.size.width = self.frame.width / Constants.Multiplier.blockSizeDivisor
         block.size.height = self.frame.width / Constants.Multiplier.blockSizeDivisor
         block.adjustedSize = block.size
-        
-        // Block label
-        blockLabel.position = CGPoint(x: block.frame.midX, y: (block.frame.midY) - (block.frame.height / 8))
-        blockLabel.fontSize = 20
-        blockLabel.fontColor = UIColor.black
-        blockLabel.fontName = "LLPIXEL3.ttf"
-        blockLabel.text = "\(block.hp)"
-        
     }
     
     func setupBorder() {
@@ -144,12 +131,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - SKPhysicsContactDelegate Functions
     
     func didBegin(_ contact: SKPhysicsContact) {
-        if(block.hp < 1) {
-            block.isHidden = true
-            blockLabel.isHidden = true
-        }
         block.hp -= 1
-        blockLabel.text = "\(block.hp)"
     }
     
 }
