@@ -17,25 +17,38 @@ class Block: SKSpriteNode {
     // MARK: - Landing Pad
     var adjustedSize: CGSize? {
         didSet {
-            setupPhysicsBody()
+            self.setupPhysicsBody()
         }
     }
     
     // MARK: - Properties
-    var hp: Int
+    var hp: Int {
+        willSet {
+            if newValue == 0 {
+                self.removeFromParent()
+            } else {
+                self.blockLabel.text = "\(newValue)"
+            }
+        }
+    }
+    
+    var blockLabel = SKLabelNode()
     
     /* Cordinates
      *  x: 0 through 6
      *  y: 0 through 6
-     *  Cordinate System: top left of screen is (0,0)
+     *  Cordinate System: bottom left of screen is (0,0)
      */
     var cordinates: (x: Int, y: Int)
     
     // MARK: - Init
     init() {
-        self.hp = 8
+        self.hp = 4
         self.cordinates = (0,0)
         super.init(texture: nil, color: UIColor.cyan, size: CGSize.zero)
+        
+        // Add label
+        setupLabel()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -43,6 +56,19 @@ class Block: SKSpriteNode {
     }
     
     // MARK: - Setup
+    
+    func setupLabel() {
+        
+        // Block label
+        blockLabel.verticalAlignmentMode = .center
+        blockLabel.fontSize = 20
+        blockLabel.fontColor = UIColor.black
+        blockLabel.fontName = "LLPIXEL3.ttf"
+        blockLabel.text = "\(self.hp)"
+        
+        self.addChild(blockLabel)
+    }
+    
     func setupPhysicsBody() {
         guard let adjustedSize = adjustedSize else {
             fatalError("Wasn't able to pass screen size")
