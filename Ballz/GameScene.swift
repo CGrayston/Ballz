@@ -30,13 +30,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Node Declaration
     var ball = Ball()
     var block = Block()
+    var shotArrow = ShotArrow()
     var playArea = SKSpriteNode()
-    
-    
     
     // Variable Declaration
     var frameSize = CGRect.zero
     
+    
+    // MARK: - DidMove to create scenes contents
     override func didMove(to view: SKView) {
         // Set Delegate
         self.physicsWorld.contactDelegate = self
@@ -44,7 +45,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Set desired play area size
         frameSize = CGRect(x: self.frame.minX, y: self.frame.minY + (self.frame.height * Constants.Multiplier.safeAreaMarginMultiplier), width: self.frame.width, height: self.frame.height * Constants.Multiplier.yPositionMultiplier)
         
-        // Setup game scene
+        // Setup
         setupPlayArea()
         setupBall()
         setupBlock()
@@ -52,9 +53,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Add children
         self.addChild(playArea)
-        self.addChild(ball)
-        self.addChild(block)
-        
+        playArea.addChild(ball)
+        playArea.addChild(block)
+        playArea.addChild(shotArrow)
+
         // Set background color
         self.backgroundColor = Constants.Colors.background
     }
@@ -68,10 +70,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupBall() {
-        ball.position.y = self.frame.minY * Constants.Multiplier.yPositionMultiplier
+        ball.position.y = playArea.frame.minY
         ball.size.width = self.frame.width * Constants.Multiplier.ballSizeMultiplier
         ball.size.height = self.frame.width * Constants.Multiplier.ballSizeMultiplier
-        ball.adjustedSize = ball.size
+        ball.setupPhysicsBody()
     }
     
     func setupBlock() {
@@ -79,7 +81,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         block.position.x = self.frame.midX
         block.size.width = self.frame.width / Constants.Multiplier.blockSizeDivisor
         block.size.height = self.frame.width / Constants.Multiplier.blockSizeDivisor
-        block.adjustedSize = block.size
+        block.setupPhysicsBody()
     }
     
     func setupBorder() {
@@ -92,36 +94,54 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Touches Methods
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // TODO: Track where the touch began so we can make the arrow from the ball
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
         
         // Reset ball velocity and position
-        ball.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
-        ball.position = CGPoint(x: 0, y: self.frame.minY * Constants.Multiplier.yPositionMultiplier)
-        for touch in touches {
-            
-            //print("Touch started: \(touch.location(in: self))")
-            let touchLocation = touch.location(in: self)
-            
-            // Set touches began
-            ball.touchesBegan = touchLocation
-        }
+        ball.reset()
+        
+        // Set initial touch
+        shotArrow.setWith(touchBegan: location)
+        
+        // Set initial touch in ball object
+        ball.setWith(touchBegan: location)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            //print("Touch ended: \(touch.location(in: self))")
-            // Set touches ended
-            let touchLocation = touch.location(in: self)
-            ball.touchesEnded = touchLocation
-            
-            ball.physicsBody?.applyImpulse(CGVector(dx: ball.dx, dy: ball.dy))
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        
+        // Guard against finger going above
+        guard let initialTouch = shotArrow.initialTouch,
+            initialTouch != location,
+            initialTouch.y > location.y else {
+                // Escape shot trajectory selection and reset arrow
+                shotArrow.escapeShot()
+                return
         }
+        
+        // Set touches ended and fire ball
+        ball.fireWith(touchEnded: location)
+        
+        // Reset initial touch and shot arrow
+        shotArrow.reset()
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        for touch in touches {
-//            print("Touch moved: \(touch.location(in: self))")
-//        }
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+
+        // Guard against finger going above initial touch
+        guard let initialTouch = shotArrow.initialTouch,
+            initialTouch != location,
+            initialTouch.y > location.y else {
+                // Escape shot trajectory selection and reset arrow
+                shotArrow.escapeShot()
+                return
+        }
+        
+        // Calculate and draw shot trajectory path
+        shotArrow.drawShotArrowFrom(position: ball.position, withTouch: location)
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -131,7 +151,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - SKPhysicsContactDelegate Functions
     
     func didBegin(_ contact: SKPhysicsContact) {
-        block.hp -= 1
+        block.wasHit()
     }
-    
 }

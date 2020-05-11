@@ -14,13 +14,6 @@ enum BlockColors {
 
 class Block: SKSpriteNode {
     
-    // MARK: - Landing Pad
-    var adjustedSize: CGSize? {
-        didSet {
-            self.setupPhysicsBody()
-        }
-    }
-    
     // MARK: - Properties
     var hp: Int {
         willSet {
@@ -29,7 +22,7 @@ class Block: SKSpriteNode {
             } else {
                 self.blockLabel.text = "\(newValue)"
             }
-        }
+        } 
     }
     
     var blockLabel = SKLabelNode()
@@ -45,7 +38,7 @@ class Block: SKSpriteNode {
     init() {
         self.hp = 4
         self.cordinates = (0,0)
-        super.init(texture: nil, color: UIColor.cyan, size: CGSize.zero)
+        super.init(texture: nil, color: UIColor.red, size: CGSize.zero)
         
         // Add label
         setupLabel()
@@ -70,12 +63,8 @@ class Block: SKSpriteNode {
     }
     
     func setupPhysicsBody() {
-        guard let adjustedSize = adjustedSize else {
-            fatalError("Wasn't able to pass screen size")
-        }
-        
         // Set physics body properties
-        physicsBody = SKPhysicsBody(rectangleOf: adjustedSize)
+        physicsBody = SKPhysicsBody(rectangleOf: self.size)
         physicsBody?.isDynamic = true
         physicsBody?.allowsRotation = false
         physicsBody?.pinned = true
@@ -93,7 +82,11 @@ class Block: SKSpriteNode {
         physicsBody?.contactTestBitMask = 1
     }
     
-    // MARK: - Methods
+    // MARK: - Block Methods
+    
+    func wasHit() {
+        self.hp -= 1
+    }
     
     func randomCordinates() {
         // TODO:
